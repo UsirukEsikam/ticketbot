@@ -58,11 +58,11 @@ class TicketBot(object):
 
     def click_by_text(self, text):
         """通过text字段点击（暂时没加类名，以后看情况）"""
-        self.dev(textContains=text).click()
+        self.select_by_text(text).click()
 
     def text_exists(self, text):
         """判断text是否出现"""
-        return self.dev(textContains=text).exists
+        return self.select_by_text(text).exists
 
     def select_by_text(self, text):
         return self.dev(textContains=text)
@@ -137,6 +137,7 @@ class TicketBot(object):
                 # 点击确定
                 self.select_by_resid("cn.damai:id/btn_buy").click()
                 while True:
+                    self.select_by_text("实名观演人").wait(10)
                     self.click_by_text("提交订单")
                     hint = self.alert_check(["继续尝试", "我知道了"])
                     if hint == "继续尝试":
@@ -146,7 +147,7 @@ class TicketBot(object):
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
                         self.click_by_text(hint)
-                        self.dev.press("back")
+                        # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
@@ -177,7 +178,7 @@ class TicketBot(object):
                 # 点确认
                 self.select_by_resid("cn.damai:id/btn_buy").click()
                 # 等待页面刷新，上划
-                self.dev(textContains="实名观演人").wait(10)
+                self.select_by_text("实名观演人").wait(10)
                 self.dev.swipe_ext("up", scale=0.9)
                 # 选人
                 for name in self.buyer_info.keys():
@@ -193,7 +194,7 @@ class TicketBot(object):
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
                         self.click_by_text(hint)
-                        self.dev.press("back")
+                        # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
