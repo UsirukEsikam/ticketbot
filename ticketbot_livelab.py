@@ -91,7 +91,7 @@ class LivelabBot(TicketBot):
                 self.dev.press("back")
                 # 提交订单
                 self.sel_by_desc("提交订单").click()
-                hint = self.alert_check(["重新选择"], 5)
+                hint = self.alert_check(["重新选择"], 10)
                 if hint == "重新选择":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
                     continue
@@ -129,6 +129,6 @@ class LivelabBot(TicketBot):
 
 if __name__ == "__main__":
     bot = LivelabBot("6fe00acd")
-    bot.livelab_presale()
-    bot.livelab_encore()
-    bot.livelab_add_buyer()
+    # bot.livelab_presale()
+    # bot.livelab_encore()
+    # bot.livelab_add_buyer()

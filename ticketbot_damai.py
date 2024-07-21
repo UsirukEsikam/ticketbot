@@ -39,9 +39,12 @@ class DaimaiBot(TicketBot):
                 # 点击确定
                 self.sel_by_resid("cn.damai:id/btn_buy").click()
                 while True:
+                    # 等待loading消失
+                    if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
+                        self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
+                    # 点击提交订单
                     self.sel_by_text("实名观演人").wait(10)
                     self.sel_by_text("提交订单").click()
-                    print("点击提交")
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
@@ -89,7 +92,9 @@ class DaimaiBot(TicketBot):
             if self.ticket_check(self.config.damai.ticket_tier, self.config.damai.target_tier, self.config.damai.coop_tier, "价格明细"):
                 # 点确认
                 self.sel_by_resid("cn.damai:id/btn_buy").click()
-                # 等待页面刷新，上划
+                # 等待loading消失
+                if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
+                    self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
                 self.sel_by_text("实名观演人").wait(10)
                 # self.dev.swipe_ext("up", scale=0.9)
                 # 提交订单
@@ -128,7 +133,7 @@ class DaimaiBot(TicketBot):
 if __name__ == "__main__":
     bot = DaimaiBot("6fe00acd")
     # bot.damai_presale()
-    bot.damai_encore()
+    # bot.damai_encore()
     # bot.damai_add_buyer()
 
 
