@@ -32,6 +32,7 @@ class DaimaiBot(TicketBot):
         3、运行脚本
         
         """
+        logger.info("=== 大麦预售流程 ===")
         if self.trigger(self.config.scheduler.trigger):
             # 点击立即预定
             self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
@@ -88,6 +89,7 @@ class DaimaiBot(TicketBot):
         3、运行脚本
         
         """
+        logger.info("=== 大麦回流票流程 ===")
         while True:
             if self.ticket_check(self.config.damai.ticket_tier, self.config.damai.target_tier, self.config.damai.coop_tier, "价格明细"):
                 # 点确认
@@ -130,8 +132,8 @@ class DaimaiBot(TicketBot):
             self.sel_by_text("确定").click()
             time.sleep(1)
 
-if __name__ == "__main__":
-    bot = DaimaiBot("6fe00acd")
+# if __name__ == "__main__":
+#     bot = DaimaiBot("6fe00acd")
     # bot.damai_presale()
     # bot.damai_encore()
     # bot.damai_add_buyer()

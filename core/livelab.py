@@ -33,6 +33,7 @@ class LivelabBot(TicketBot):
         3、运行脚本
 
         """
+        logger.info("=== 纷玩岛预售流程 ===")
         if self.trigger(self.config.scheduler.trigger):
             self.sel_by_desc("立即购买").click()
             while True:
@@ -77,6 +78,7 @@ class LivelabBot(TicketBot):
         3、运行脚本
 
         """
+        logger.info("=== 纷玩岛回流票流程 ===")
         while True:
             if self.ticket_check(self.config.livelab.ticket_tier, self.config.livelab.target_tier, self.config.livelab.coop_tier, "购买数量"):
                 # 点确认
@@ -127,8 +129,8 @@ class LivelabBot(TicketBot):
             self.sel_by_desc("确定").click()
             time.sleep(1)
 
-if __name__ == "__main__":
-    bot = LivelabBot("6fe00acd")
+# if __name__ == "__main__":
+#     bot = LivelabBot("6fe00acd")
     # bot.livelab_presale()
     # bot.livelab_encore()
     # bot.livelab_add_buyer()
