@@ -96,6 +96,7 @@ class LivelabBot(TicketBot):
                 hint = self.alert_check(["重新选择"], 10)
                 if hint == "重新选择":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+                    self.sel_by_desc(hint).click()
                     continue
                 elif self.sel_by_desc("确认并支付").exists:
                     logger.info("出现支付窗口，脚本结束")
