@@ -39,15 +39,20 @@ class LivelabBot(TicketBot):
             while True:
                 self.sel_by_desc("确认").click()
                 self.sel_by_desc("提交订单").click()
-                hint = self.alert_check(["重新选择"], 5)
-                if hint == "重新选择":
+                hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
+                if hint == "请求人数多":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+                    self.sel_by_desc("重新选择").click()
                     continue
+                elif hint == "订单中包含已购买":
+                    logger.info("出现'{0}'弹窗，脚本结束".format(hint))
+                    return
                 elif self.sel_by_desc("确认并支付").exists:
                     logger.info("出现支付窗口，脚本结束")
                     return
                 else:
-                    logger.info("未知情况，请去uiautodev截图调试")
+                    logger.info("未知情况，请查看截图")
+                    self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                     return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -93,16 +98,20 @@ class LivelabBot(TicketBot):
                 self.dev.press("back")
                 # 提交订单
                 self.sel_by_desc("提交订单").click()
-                hint = self.alert_check(["重新选择"], 10)
-                if hint == "重新选择":
+                hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
+                if hint == "请求人数多":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.sel_by_desc(hint).click()
+                    self.sel_by_desc("重新选择").click()
                     continue
+                elif hint == "订单中包含已购买":
+                    logger.info("出现'{0}'弹窗，脚本结束".format(hint))
+                    return
                 elif self.sel_by_desc("确认并支付").exists:
                     logger.info("出现支付窗口，脚本结束")
                     return
                 else:
-                    logger.info("未知情况，请去uiautodev截图调试")
+                    logger.info("未知情况，请查看截图")
+                    self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                     return
 
     def livelab_add_buyer(self):
