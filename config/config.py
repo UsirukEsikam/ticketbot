@@ -8,6 +8,7 @@ class Config(object):
         self.buyer = BuyerConfig(self.config.get("buyer", {}))
         self.livelab = LivelabConfig(self.config.get("ticket_livelab", {}))
         self.damai = DamaiConfig(self.config.get("ticket_damai", {}))
+        self.maoyan = MaoyanConfig(self.config.get("ticket_maoyan", {}))
         self.scheduler = SchedulerConfig(self.config.get("scheduler", {}))
 
     def read_config(self, path):
@@ -30,6 +31,13 @@ class LivelabConfig(object):
         self.ticket_tier = config.get("ticket_tier")
 
 class DamaiConfig(object):
+    def __init__(self, config) -> None:
+        self.target_price = config.get("target_price")
+        self.target_tier = config.get("target_tier")
+        self.coop_tier = config.get("coop_tier")
+        self.ticket_tier = config.get("ticket_tier")
+
+class MaoyanConfig(object):
     def __init__(self, config) -> None:
         self.target_price = config.get("target_price")
         self.target_tier = config.get("target_tier")

@@ -8,7 +8,7 @@ class TicketBot(object):
     """抢票脚本基类"""
 
     def __init__(self, app, serial=None) -> None:
-        # app可选：livelab, damai
+        # app可选：livelab, damai, yaoyan
         self.app = app
         self.read_config()
         self.init_dev(serial)
@@ -83,6 +83,9 @@ ___________.__        __           __    __________        __
         elif self.app == "livelab":
             logger.info("目标票价：{0}({1})".format(self.config.livelab.target_price, self.config.livelab.target_tier))
             logger.info("场次：{0}".format(self.config.livelab.ticket_tier))
+        elif self.app == "maoyan":
+            logger.info("目标票价：{0}({1})".format(self.config.maoyan.target_price, self.config.maoyan.target_tier))
+            logger.info("场次：{0}".format(self.config.maoyan.ticket_tier))
         else:
             logger.error("app模式选择错误")
         logger.info("开枪时间：{0}".format(self.config.scheduler.trigger))

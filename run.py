@@ -1,6 +1,7 @@
 import os
 from core.damai import DaimaiBot
 from core.livelab import LivelabBot
+from core.maoyan import MaoyanBot
 
 class Menu:
     def __init__(self, title, options):
@@ -50,9 +51,16 @@ class CommandLineApp:
             {"description": "添加金主信息", "function": self.livelab_add_buyer}
         ])
 
+        self.option3_menu = Menu("猫眼", [
+            {"description": "抢预售票", "function": self.maoyan_presale},
+            {"description": "刷回流票", "function": self.maoyan_encore},
+            {"description": "添加金主信息", "function": self.maoyan_add_buyer}
+        ])
+
         self.main_menu = Menu("请选择相应的数字", [
             {"description": "大麦网", "function": self.option1_menu.display},
-            {"description": "纷玩岛", "function": self.option2_menu.display}
+            {"description": "纷玩岛", "function": self.option2_menu.display},
+            {"description": "猫眼", "function": self.option3_menu.display}
         ])
 
     def damai_presale(self):
@@ -65,7 +73,7 @@ class CommandLineApp:
         bot_damai.damai_presale()
 
     def damai_encore(self):
-        print("大麦预售流程")
+        print("大麦回流票流程")
         print("1、请在config.yaml中配置好相关信息")
         print("2、请预选好场次、票档、观演人")
         print("3、进入APP选票页面")
@@ -87,7 +95,7 @@ class CommandLineApp:
         bot_livelab.livelab_presale()
 
     def livelab_encore(self):
-        print("纷玩岛预售流程")
+        print("纷玩岛回流票流程")
         print("1、请在config.yaml中配置好相关信息")
         print("2、请预选好场次、票档、观演人")
         print("3、进入APP选票页面")
@@ -98,6 +106,28 @@ class CommandLineApp:
     def livelab_add_buyer(self):
         bot_livelab = LivelabBot()
         bot_livelab.livelab_add_buyer()
+
+    def maoyan_presale(self):
+        print("猫眼预售流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP预售页面")
+        input("Press Enter to continue...")
+        bot_maoyan = MaoyanBot()
+        bot_maoyan.maoyan_presale()
+
+    def maoyan_encore(self):
+        print("猫眼回流票流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP选票页面")
+        input("Press Enter to continue...")
+        bot_maoyan = MaoyanBot()
+        bot_maoyan.maoyan_encore()
+
+    def maoyan_add_buyer(self):
+        bot_maoyan = MaoyanBot()
+        bot_maoyan.maoyan_add_buyer()
 
     def run(self):
         self.main_menu.display()
