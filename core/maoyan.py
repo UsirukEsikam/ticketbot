@@ -1,5 +1,4 @@
 import time
-from itertools import cycle
 from core.ticketbot import TicketBot
 from logger.logger import logger
 
@@ -65,31 +64,27 @@ class MaoyanBot(TicketBot):
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """
-        刷票程序V1
-        V1：先用点击票价来试试
+        刷票程序V2
+        V1：先用点击票价来试试（缺票的票价点起来是直接弹窗的，实际上没有作用）
+        V2：点击场次刷票，点击场次和票价都会出loading，猜测都会做余票检测
 
         """
-        # 点击场次
-        self.sel_by_text(ticket_tier).click()
-        # 上滑
-        self.dev.swipe_ext("up", scale=0.9)
-        # 循环池子
-        tier_pool = cycle([target_tier, coop_tier])
-        # 开始循环
         while True:
-            next_tier = next(tier_pool)
-            # 点击对应的票价
-            self.sel_by_text(next_tier).click()
-            time.sleep(0.25)
-            # 跳过缺货登记提示
+            # 点击场次
+            self.sel_by_text(ticket_tier).click()
+            # 上滑
+            self.dev.swipe_ext("up", scale=0.9)
+            # 点击目标票价
+            self.sel_by_text(target_tier).click()
+            time.sleep(0.1)
+            # 弹缺票提示：无票，否则可下单
             if self.sel_by_text("若不是您的常用手机号").exists:
                 # 这个值有点儿怪，估计是随机的，再观察观察
                 self.sel_by_text("QcFQlwZ+7fcxb+GN3Y6bdOtQkI8JRe2ROKg9Poe6R+0f8AF8Bj7VhD492QAAAABJRU5ErkJggg==").click()
-            # 如果tier == target_tier，则判断是否出现magic word（可以触发点击确定的提示）
-            if next_tier == target_tier:
-                if self.sel_by_text(magic_word).exists:
-                    logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
-                    return True
+                self.dev.swipe_ext("down", scale=0.9)
+            else:
+                logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
+                return True
 
     def maoyan_encore(self):
         """
