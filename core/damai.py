@@ -64,8 +64,8 @@ class DaimaiBot(TicketBot):
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """
         刷票程序V3（V1点票价，好像没用）
-        V1: 循环点击两个门票（好像是没作用，最后留了个备份）
-        V2：循环点击两个场次（有用，但是需要sleep至少4-5s）
+        V1: 循环点击两个门票（好像是没作用，文件最下面留了个备份）
+        V2：循环点击两个场次（有用，但是需要sleep至少4-5s，不知道是不是个例，待验证）
         V3：最原始的法子：出去再进来
 
         """
