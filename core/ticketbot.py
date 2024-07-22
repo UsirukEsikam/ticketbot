@@ -7,7 +7,7 @@ from logger.logger import logger
 class TicketBot(object):
     """抢票脚本基类"""
 
-    def __init__(self, serial, app) -> None:
+    def __init__(self, app, serial=None) -> None:
         # app可选：livelab, damai
         self.app = app
         self.read_config()
@@ -20,7 +20,10 @@ class TicketBot(object):
         self.show_initialization_prompt()
 
     def init_dev(self, serial):
-        self.dev = u2.connect(serial)
+        if serial is not None:
+            self.dev = u2.connect(serial)
+        else:
+            self.dev = u2.connect()
 
     def init_damai(self):
         # 场次的layout
@@ -61,11 +64,11 @@ class TicketBot(object):
         print(r"""
 
 
-___________.__        __              __ __________        __   
-\__    ___/|__| ____ |  | __ ____   _/  |\______   \ _____/  |_ 
-  |    |   |  |/ ___\|  |/ // __ \  \   __\    |  _//  _ \   __\
-  |    |   |  \  \___|    <\  ___/   |  | |    |   (  <_> )  |  
-  |____|   |__|\___  >__|_ \\___  >  |__| |______  /\____/|__|  
+___________.__        __           __    __________        __   
+\__    ___/|__| ____ |  | __ _____/  |_  \______   \ _____/  |_ 
+  |    |   |  |/ ___\|  |/ // __ \   __\  |    |  _//  _ \   __\
+  |    |   |  \  \___|    <\  ___/|  |    |    |   (  <_> )  |  
+  |____|   |__|\___  >__|_ \\___  >__|    |______  /\____/|__|  
                    \/     \/    \/               \/             
 
 

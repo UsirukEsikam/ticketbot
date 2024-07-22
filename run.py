@@ -56,51 +56,47 @@ class CommandLineApp:
         ])
 
     def damai_presale(self):
-        print("")
-        print("=== 大麦预售流程 ===")
-        print("0、请在config.yaml中配置好相关信息")
-        print("1、请预选好场次、票档、观演人")
-        print("2、进入APP预售页面")
+        print("大麦预售流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP预售页面")
         input("Press Enter to continue...")
-        bot_damai = DaimaiBot("6fe00acd", "damai")
+        bot_damai = DaimaiBot()
         bot_damai.damai_presale()
 
     def damai_encore(self):
-        print("")
-        print("=== 大麦预售流程 ===")
-        print("0、请在config.yaml中配置好相关信息")
-        print("1、请预选好场次、票档、观演人")
-        print("2、进入APP选票页面")
+        print("大麦预售流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP选票页面")
         input("Press Enter to continue...")
-        bot_damai = DaimaiBot("6fe00acd", "damai")
+        bot_damai = DaimaiBot()
         bot_damai.damai_encore()
 
     def damai_add_buyer(self):
-        bot_damai = DaimaiBot("6fe00acd", "damai")
+        bot_damai = DaimaiBot()
         bot_damai.damai_add_buyer()
 
     def livelab_presale(self):
-        print("")
-        print("=== 纷玩岛预售流程 ===")
-        print("0、请在config.yaml中配置好相关信息")
-        print("1、请预选好场次、票档、观演人")
-        print("2、进入APP预售页面")
+        print("纷玩岛预售流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP预售页面")
         input("Press Enter to continue...")
-        bot_livelab = LivelabBot("6fe00acd", "livelab")
+        bot_livelab = LivelabBot()
         bot_livelab.livelab_presale()
 
     def livelab_encore(self):
-        print("")
-        print("=== 纷玩岛预售流程 ===")
-        print("0、请在config.yaml中配置好相关信息")
-        print("1、请预选好场次、票档、观演人")
-        print("2、进入APP选票页面")
+        print("纷玩岛预售流程")
+        print("1、请在config.yaml中配置好相关信息")
+        print("2、请预选好场次、票档、观演人")
+        print("3、进入APP选票页面")
         input("Press Enter to continue...")
-        bot_livelab = LivelabBot("6fe00acd", "livelab")
+        bot_livelab = LivelabBot()
         bot_livelab.livelab_encore()
 
     def livelab_add_buyer(self):
-        bot_livelab = LivelabBot("6fe00acd", "livelab")
+        bot_livelab = LivelabBot()
         bot_livelab.livelab_add_buyer()
 
     def run(self):

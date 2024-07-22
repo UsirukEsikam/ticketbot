@@ -9,8 +9,8 @@ class DaimaiBot(TicketBot):
 
     """
 
-    def __init__(self, serial, app="damai") -> None:
-        super().__init__(serial, app)
+    def __init__(self, app="damai", serial=None) -> None:
+        super().__init__(app, serial)
 
     def alert_check(self, hint=[], timeout=10):
         """检测弹窗，默认timeout=10s"""
