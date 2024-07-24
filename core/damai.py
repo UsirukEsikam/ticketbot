@@ -51,14 +51,14 @@ class DaimaiBot(TicketBot):
 
         """
         # 点击确定
-        self.sel_by_resid("cn.damai:id/btn_buy").click()
+        self.sel_by_resid("cn.damai:id/btn_buy_view").click()
         # 等待loading消失
         if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
             self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
         while True:
             # 点击提交订单
             self.sel_by_text("实名观演人").wait(10)
-            self.sel_by_text("提交订单").click()
+            self.sel_by_resid("cn.damai:id/bottom_layout").child(index=7, className="android.widget.FrameLayout").click()
             hint = self.alert_check(["继续尝试", "我知道了"], 10)
             if hint == "继续尝试":
                 logger.info("出现'{0}'弹窗，继续运行...".format(hint))

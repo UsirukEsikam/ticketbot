@@ -59,7 +59,8 @@ class LivelabBot(TicketBot):
         hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
         if hint == "请求人数多":
             logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-            self.sel_by_desc("重新选择").click()
+            # self.sel_by_desc("重新选择").click()
+            self.dev.click(534, 1538)
             return False
         elif hint == "订单中包含已购买":
             logger.info("出现'{0}'弹窗，脚本结束".format(hint))
