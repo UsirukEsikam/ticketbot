@@ -1,7 +1,10 @@
 import os
-from core.damai import DaimaiBot
+import time
+from core.ticketbot import TicketBot
 from core.livelab import LivelabBot
+from core.damai import DaimaiBot
 from core.maoyan import MaoyanBot
+from logger.logger import logger
 
 class Menu:
     def __init__(self, title, options):
@@ -130,7 +133,13 @@ class CommandLineApp:
         bot_maoyan.maoyan_add_buyer()
 
     def run(self):
-        self.main_menu.display()
+        try:
+            self.main_menu.display()
+        except Exception as e:
+            logger.error(e, stack_info=True, exc_info=True)
+        finally:
+            bot = TicketBot(app="main")
+            bot.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
 
 if __name__ == "__main__":
     app = CommandLineApp()
