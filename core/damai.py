@@ -49,19 +49,19 @@ class DaimaiBot(TicketBot):
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         self.sel_by_text(hint).click()
                         continue
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         self.sel_by_text(hint).click()
                         # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
                         logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -94,7 +94,7 @@ class DaimaiBot(TicketBot):
         """
         logger.info("=== 大麦回流票流程 ===")
         while True:
-            if self.ticket_check(self.config.damai.ticket_tier, self.config.damai.target_tier, self.config.damai.coop_tier, "价格明细"):
+            if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "价格明细"):
                 # 点确认
                 self.sel_by_resid("cn.damai:id/btn_buy").click()
                 # 等待loading消失
@@ -108,19 +108,19 @@ class DaimaiBot(TicketBot):
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         self.sel_by_text(hint).click()
                         continue
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         self.sel_by_text(hint).click()
                         # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
                         logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                         return
 
     def damai_add_buyer(self):
@@ -134,7 +134,7 @@ class DaimaiBot(TicketBot):
             self.sel_by_text("请填写证件号码").click()
             self.sel_by_text("请填写证件号码").send_keys(info[0])
             self.dev.press("back")
-            self.sel_by_index(index=0, className="android.widget.CheckBox").click()
+            self.sel_by_index(0, "android.widget.CheckBox").click()
             self.sel_by_text("确定").click()
             time.sleep(1)
 
@@ -185,9 +185,9 @@ class DaimaiBot(TicketBot):
         
     #     """
     #     ticket_num = len(self.config.buyer.info)
-    #     total_price = ticket_num * self.config.damai.target_price
+    #     total_price = ticket_num * self.config.ticket.target_price
     #     while True:
-    #         if self.ticket_check(self.config.damai.ticket_tier, self.config.damai.target_tier, self.config.damai.coop_tier, "价格明细"):
+    #         if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "价格明细"):
     #             # 点加号
     #             while True:
     #                 # time.sleep(0.1)

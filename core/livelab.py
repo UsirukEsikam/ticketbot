@@ -52,7 +52,7 @@ class LivelabBot(TicketBot):
                     return
                 else:
                     logger.info("未知情况，请查看截图")
-                    self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                     return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -85,7 +85,7 @@ class LivelabBot(TicketBot):
         """
         logger.info("=== 纷玩岛回流票流程 ===")
         while True:
-            if self.ticket_check(self.config.livelab.ticket_tier, self.config.livelab.target_tier, self.config.livelab.coop_tier, "购买数量"):
+            if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "购买数量"):
                 # 点确认
                 self.sel_by_desc("确认").click()
                 # 上划
@@ -111,7 +111,7 @@ class LivelabBot(TicketBot):
                     return
                 else:
                     logger.info("未知情况，请查看截图")
-                    self.dev.screenshot("{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
                     return
 
     def livelab_add_buyer(self):
@@ -127,7 +127,7 @@ class LivelabBot(TicketBot):
             input.send_keys(name)
             # 选择身份证类型
             self.dev(index=4, className="android.view.View").click()
-            self.click_by_text("确认")
+            self.sel_by_desc("确认").click()
             # 输入身份证
             input = self.dev(index=1, className="android.view.View").child(index=6, className="android.view.View").child(className="android.widget.EditText")
             input.click()

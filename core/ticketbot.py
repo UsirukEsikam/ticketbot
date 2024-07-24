@@ -77,15 +77,6 @@ ___________.__        __           __    __________        __
         logger.info("请认真核对配置信息：")
         logger.info("用户信息：{0}".format(self.config.ghost.info))
         logger.info("金主信息：{0}".format(self.config.buyer.info))
-        if self.app == "damai":
-            logger.info("目标票价：{0}({1}档)".format(self.config.damai.target_price, self.config.damai.target_tier))
-            logger.info("场次：{0}档".format(self.config.damai.ticket_tier))
-        elif self.app == "livelab":
-            logger.info("目标票价：{0}({1})".format(self.config.livelab.target_price, self.config.livelab.target_tier))
-            logger.info("场次：{0}".format(self.config.livelab.ticket_tier))
-        elif self.app == "maoyan":
-            logger.info("目标票价：{0}({1})".format(self.config.maoyan.target_price, self.config.maoyan.target_tier))
-            logger.info("场次：{0}".format(self.config.maoyan.ticket_tier))
-        else:
-            logger.error("app模式选择错误")
+        logger.info("目标票价：{0}({1})".format(self.config.ticket.target_price, self.config.ticket.target_tier))
+        logger.info("场次：{0}".format(self.config.ticket.ticket_tier))
         logger.info("开枪时间：{0}".format(self.config.scheduler.trigger))

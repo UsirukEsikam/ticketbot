@@ -6,9 +6,7 @@ class Config(object):
         self.config = self.read_config(config_path)
         self.ghost = GhostConfig(self.config.get("ghost", {}))
         self.buyer = BuyerConfig(self.config.get("buyer", {}))
-        self.livelab = LivelabConfig(self.config.get("ticket_livelab", {}))
-        self.damai = DamaiConfig(self.config.get("ticket_damai", {}))
-        self.maoyan = MaoyanConfig(self.config.get("ticket_maoyan", {}))
+        self.ticket = TicketConfig(self.config.get("ticket", {}))
         self.scheduler = SchedulerConfig(self.config.get("scheduler", {}))
 
     def read_config(self, path):
@@ -23,26 +21,12 @@ class BuyerConfig(object):
     def __init__(self, config) -> None:
         self.info = dict(zip(config.get("buyer_name"), zip(config.get("buyer_id"), config.get("buyer_mobile"))))
 
-class LivelabConfig(object):
+class TicketConfig(object):
     def __init__(self, config) -> None:
         self.target_price = config.get("target_price")
         self.target_tier = config.get("target_tier")
-        self.coop_tier = config.get("coop_tier")
         self.ticket_tier = config.get("ticket_tier")
-
-class DamaiConfig(object):
-    def __init__(self, config) -> None:
-        self.target_price = config.get("target_price")
-        self.target_tier = config.get("target_tier")
         self.coop_tier = config.get("coop_tier")
-        self.ticket_tier = config.get("ticket_tier")
-
-class MaoyanConfig(object):
-    def __init__(self, config) -> None:
-        self.target_price = config.get("target_price")
-        self.target_tier = config.get("target_tier")
-        self.coop_tier = config.get("coop_tier")
-        self.ticket_tier = config.get("ticket_tier")
 
 class SchedulerConfig(object):
     def __init__(self, config) -> None:
