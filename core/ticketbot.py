@@ -49,6 +49,9 @@ class TicketBot(object):
     def sel_children(self, parent, index, class_name):
         return parent.child(index=index, className=class_name)
 
+    def screenshot(self):
+        self.dev.screenshot("./image/{0}-{1}.jpg".format(__name__, time.strftime("%Y%m%d-%H%M%S")))
+
     def trigger(self, trigger):
         now_time = datetime.now
         while True:

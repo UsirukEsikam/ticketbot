@@ -39,29 +39,29 @@ class DaimaiBot(TicketBot):
             while True:
                 # 点击确定
                 self.sel_by_resid("cn.damai:id/btn_buy").click()
+                # 等待loading消失
+                if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
+                    self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
                 while True:
-                    # 等待loading消失
-                    if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
-                        self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
                     # 点击提交订单
                     self.sel_by_text("实名观演人").wait(10)
                     self.sel_by_text("提交订单").click()
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         continue
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
                         logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -100,27 +100,26 @@ class DaimaiBot(TicketBot):
                 # 等待loading消失
                 if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
                     self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
-                self.sel_by_text("实名观演人").wait(10)
-                # self.dev.swipe_ext("up", scale=0.9)
-                # 提交订单
                 while True:
+                    # 提交订单
+                    self.sel_by_text("实名观演人").wait(10)
                     self.sel_by_text("提交订单").click()
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         continue
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         # self.dev.press("back")
                         break
                     # 还少支付界面的提示
                     else:
                         logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         return
 
     def damai_add_buyer(self):

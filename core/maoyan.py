@@ -48,18 +48,18 @@ class MaoyanBot(TicketBot):
                     hint = self.alert_check(["继续尝试", "我知道了"], 10)
                     if hint == "继续尝试":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         continue
                     elif hint == "我知道了":
                         logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         self.sel_by_text(hint).click()
                         break
                     # 还少支付界面的提示
                     else:
                         logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                        self.screenshot()
                         return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -107,18 +107,18 @@ class MaoyanBot(TicketBot):
                 hint = self.alert_check(["继续尝试", "我知道了"], 10)
                 if hint == "继续尝试":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.screenshot()
                     self.sel_by_text(hint).click()
                     continue
                 elif hint == "我知道了":
                     logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.screenshot()
                     self.sel_by_text(hint).click()
                     break
                 # 还少支付界面的提示
                 else:
                     logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.screenshot()
                     return
 
     def maoyan_add_buyer(self):

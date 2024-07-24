@@ -1,5 +1,4 @@
 import os
-import time
 from core.ticketbot import TicketBot
 from core.livelab import LivelabBot
 from core.damai import DaimaiBot
@@ -139,7 +138,7 @@ class CommandLineApp:
             logger.error(e, stack_info=True, exc_info=True)
         finally:
             bot = TicketBot(app="main")
-            bot.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+            bot.screenshot()
 
 if __name__ == "__main__":
     app = CommandLineApp()

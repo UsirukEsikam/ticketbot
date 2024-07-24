@@ -52,7 +52,7 @@ class LivelabBot(TicketBot):
                     return
                 else:
                     logger.info("未知情况，请查看截图")
-                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.screenshot()
                     return
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
@@ -111,7 +111,7 @@ class LivelabBot(TicketBot):
                     return
                 else:
                     logger.info("未知情况，请查看截图")
-                    self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
+                    self.screenshot()
                     return
 
     def livelab_add_buyer(self):
