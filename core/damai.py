@@ -24,46 +24,6 @@ class DaimaiBot(TicketBot):
                 logger.info("弹窗检测超时")
                 return None
 
-    def damai_presale(self):
-        """
-        大麦预售流程
-        1、预先选好场次、票档、观演人
-        2、进入预售页面
-        3、运行脚本
-        
-        """
-        logger.info("=== 大麦预售流程 ===")
-        if self.trigger(self.config.scheduler.trigger):
-            # 点击立即预定
-            self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
-            while True:
-                # 点击确定
-                self.sel_by_resid("cn.damai:id/btn_buy").click()
-                # 等待loading消失
-                if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
-                    self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
-                while True:
-                    # 点击提交订单
-                    self.sel_by_text("实名观演人").wait(10)
-                    self.sel_by_text("提交订单").click()
-                    hint = self.alert_check(["继续尝试", "我知道了"], 10)
-                    if hint == "继续尝试":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        continue
-                    elif hint == "我知道了":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        # self.dev.press("back")
-                        break
-                    # 还少支付界面的提示
-                    else:
-                        logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.screenshot()
-                        return
-
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """
         刷票程序V3（V1点票价，好像没用）
@@ -84,6 +44,56 @@ class DaimaiBot(TicketBot):
                 self.dev.press("back")
                 self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
 
+    def process_order(self):
+        """
+        下单流程的函数
+        主要功能：点击确定→下单→alter check（需再循环一次return False，下单完成、出错etc return True）
+
+        """
+        # 点击确定
+        self.sel_by_resid("cn.damai:id/btn_buy").click()
+        # 等待loading消失
+        if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
+            self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
+        while True:
+            # 点击提交订单
+            self.sel_by_text("实名观演人").wait(10)
+            self.sel_by_text("提交订单").click()
+            hint = self.alert_check(["继续尝试", "我知道了"], 10)
+            if hint == "继续尝试":
+                logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+                self.screenshot()
+                self.sel_by_text(hint).click()
+                continue
+            elif hint == "我知道了":
+                logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+                self.screenshot()
+                self.sel_by_text(hint).click()
+                return False
+            # 还少支付界面的提示
+            else:
+                logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
+                self.screenshot()
+                return True
+
+    def damai_presale(self):
+        """
+        大麦预售流程
+        0、预先选好场次、票档、观演人
+        1、进入预售页面
+        2、运行脚本
+        
+        """
+        logger.info("=== 大麦预售流程 ===")
+        # 定时运行
+        if self.trigger(self.config.scheduler.trigger):
+            # 点击立即预定
+            self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
+            while True:
+                # 开始下单
+                if self.process_order():
+                    return
+
     def damai_encore(self):
         """
         大麦回流票流程V2（预售时填好人数的话，不用再选票数和观演人的，去掉相关流程）
@@ -94,33 +104,11 @@ class DaimaiBot(TicketBot):
         """
         logger.info("=== 大麦回流票流程 ===")
         while True:
+            # 查库存
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "价格明细"):
-                # 点确认
-                self.sel_by_resid("cn.damai:id/btn_buy").click()
-                # 等待loading消失
-                if self.sel_by_resid("cn.damai:id/uikit_loading_icon").exists:
-                    self.sel_by_resid("cn.damai:id/uikit_loading_icon").wait_gone(10)
-                while True:
-                    # 提交订单
-                    self.sel_by_text("实名观演人").wait(10)
-                    self.sel_by_text("提交订单").click()
-                    hint = self.alert_check(["继续尝试", "我知道了"], 10)
-                    if hint == "继续尝试":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        continue
-                    elif hint == "我知道了":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        # self.dev.press("back")
-                        break
-                    # 还少支付界面的提示
-                    else:
-                        logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.screenshot()
-                        return
+                # 开始下单
+                if self.process_order():
+                    return
 
     def damai_add_buyer(self):
         """添加观演人，需从'我的'界面开始"""

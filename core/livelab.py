@@ -25,36 +25,6 @@ class LivelabBot(TicketBot):
                 logger.info("弹窗检测超时")
                 return None
 
-    def livelab_presale(self):
-        """
-        纷玩岛预售流程
-        1、预先选好场次、票档、观演人
-        2、进入预售页面
-        3、运行脚本
-
-        """
-        logger.info("=== 纷玩岛预售流程 ===")
-        if self.trigger(self.config.scheduler.trigger):
-            self.sel_by_desc("立即购买").click()
-            while True:
-                self.sel_by_desc("确认").click()
-                self.sel_by_desc("提交订单").click()
-                hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
-                if hint == "请求人数多":
-                    logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.sel_by_desc("重新选择").click()
-                    continue
-                elif hint == "订单中包含已购买":
-                    logger.info("出现'{0}'弹窗，脚本结束".format(hint))
-                    return
-                elif self.sel_by_desc("确认并支付").exists:
-                    logger.info("出现支付窗口，脚本结束")
-                    return
-                else:
-                    logger.info("未知情况，请查看截图")
-                    self.screenshot()
-                    return
-
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """刷票程序（不断点击两个票价，出现break_word后break，返回True"""
         # 点击场次
@@ -75,6 +45,51 @@ class LivelabBot(TicketBot):
                     logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
                     return True
 
+    def process_order(self):
+        """
+        下单流程的函数
+        主要功能：点击确定→下单→alter check（需再循环一次return False，下单完成、出错etc return True）
+
+        """
+        # 点击确认
+        self.sel_by_desc("确认").click()
+        # 点击提交订单
+        self.sel_by_desc("提交订单").click()
+        # 查弹窗
+        hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
+        if hint == "请求人数多":
+            logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+            self.sel_by_desc("重新选择").click()
+            return False
+        elif hint == "订单中包含已购买":
+            logger.info("出现'{0}'弹窗，脚本结束".format(hint))
+            return True
+        elif self.sel_by_desc("确认并支付").exists:
+            logger.info("出现支付窗口，脚本结束")
+            return True
+        else:
+            logger.info("未知情况，请查看截图")
+            self.screenshot()
+            return True
+
+    def livelab_presale(self):
+        """
+        纷玩岛预售流程
+        1、预先选好场次、票档、观演人
+        2、进入预售页面
+        3、运行脚本
+
+        """
+        logger.info("=== 纷玩岛预售流程 ===")
+        # 定时启动
+        if self.trigger(self.config.scheduler.trigger):
+            # 点击立即购买
+            self.sel_by_desc("立即购买").click()
+            while True:
+                # 下单流程
+                if self.process_order():
+                    return
+
     def livelab_encore(self):
         """
         纷玩岛回流票流程V2（先去掉V1的选票数和选观演人的步骤，八成会记忆，不行再改回来）
@@ -85,33 +100,10 @@ class LivelabBot(TicketBot):
         """
         logger.info("=== 纷玩岛回流票流程 ===")
         while True:
+            # 查余票
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "购买数量"):
-                # 点确认
-                self.sel_by_desc("确认").click()
-                # 上划
-                self.sel_by_desc("票品信息").wait(5)
-                self.dev.swipe_ext("up", scale=0.9)
-                # 输入联系人
-                self.sel_by_index(1, "android.widget.EditText").click()
-                self.sel_by_index(1, "android.widget.EditText").send_keys("Tachikoma")
-                # 关掉输入法
-                self.dev.press("back")
-                # 提交订单
-                self.sel_by_desc("提交订单").click()
-                hint = self.alert_check(["请求人数多", "订单中包含已购买"], 10)
-                if hint == "请求人数多":
-                    logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.sel_by_desc("重新选择").click()
-                    continue
-                elif hint == "订单中包含已购买":
-                    logger.info("出现'{0}'弹窗，脚本结束".format(hint))
-                    return
-                elif self.sel_by_desc("确认并支付").exists:
-                    logger.info("出现支付窗口，脚本结束")
-                    return
-                else:
-                    logger.info("未知情况，请查看截图")
-                    self.screenshot()
+                # 下单流程
+                if self.process_order():
                     return
 
     def livelab_add_buyer(self):
