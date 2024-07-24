@@ -45,7 +45,7 @@ class LivelabBot(TicketBot):
                     logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
                     return True
 
-    def process_order(self):
+    def order_workflow(self):
         """
         下单流程的函数
         主要功能：点击确定→下单→alter check（需再循环一次return False，下单完成、出错etc return True）
@@ -93,7 +93,7 @@ class LivelabBot(TicketBot):
             self.sel_by_desc("立即购买").click()
             while True:
                 # 下单流程
-                if self.process_order():
+                if self.order_workflow():
                     return
 
     def livelab_encore(self):
@@ -109,7 +109,7 @@ class LivelabBot(TicketBot):
             # 查余票
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "购买数量"):
                 # 下单流程
-                if self.process_order():
+                if self.order_workflow():
                     return
 
     def livelab_add_buyer(self):

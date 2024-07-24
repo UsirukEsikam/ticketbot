@@ -44,7 +44,7 @@ class DaimaiBot(TicketBot):
                 self.dev.press("back")
                 self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
 
-    def process_order(self):
+    def order_workflow(self):
         """
         下单流程的函数
         主要功能：点击确定→下单→alter check（需再循环一次return False，下单完成、出错etc return True）
@@ -91,7 +91,7 @@ class DaimaiBot(TicketBot):
             self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
             while True:
                 # 开始下单
-                if self.process_order():
+                if self.order_workflow():
                     return
 
     def damai_encore(self):
@@ -107,7 +107,7 @@ class DaimaiBot(TicketBot):
             # 查库存
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "价格明细"):
                 # 开始下单
-                if self.process_order():
+                if self.order_workflow():
                     return
 
     def damai_add_buyer(self):
