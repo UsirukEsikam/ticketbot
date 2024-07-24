@@ -123,16 +123,16 @@ class LivelabBot(TicketBot):
             # 输入姓名
             input = self.dev(index=1, className="android.view.View").child(index=2, className="android.view.View").child(className="android.widget.EditText")
             input.click()
-            self.dev.press("back")
             input.send_keys(name)
+            self.dev.press("back")
             # 选择身份证类型
             self.dev(index=4, className="android.view.View").click()
             self.sel_by_desc("确认").click()
             # 输入身份证
             input = self.dev(index=1, className="android.view.View").child(index=6, className="android.view.View").child(className="android.widget.EditText")
             input.click()
-            self.dev.press("back")
             input.send_keys(info[0])
+            self.dev.press("back")
             # 勾选协议
             self.dev(index=9, className="android.view.View").click()
             # 确定

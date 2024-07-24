@@ -39,16 +39,16 @@ class CommandLineApp:
         self.init_menu()
 
     def init_menu(self):
-        self.option1_menu = Menu("大麦网", [
-            {"description": "抢预售票", "function": self.damai_presale},
-            {"description": "刷回流票", "function": self.damai_encore},
-            {"description": "添加金主信息", "function": self.damai_add_buyer}
-        ])
-        
-        self.option2_menu = Menu("纷玩岛", [
+        self.option1_menu = Menu("纷玩岛", [
             {"description": "抢预售票", "function": self.livelab_presale},
             {"description": "刷回流票", "function": self.livelab_encore},
             {"description": "添加金主信息", "function": self.livelab_add_buyer}
+        ])
+
+        self.option2_menu = Menu("大麦", [
+            {"description": "抢预售票", "function": self.damai_presale},
+            {"description": "刷回流票", "function": self.damai_encore},
+            {"description": "添加金主信息", "function": self.damai_add_buyer}
         ])
 
         self.option3_menu = Menu("猫眼", [
@@ -58,8 +58,8 @@ class CommandLineApp:
         ])
 
         self.main_menu = Menu("请选择相应的数字", [
-            {"description": "大麦网", "function": self.option1_menu.display},
-            {"description": "纷玩岛", "function": self.option2_menu.display},
+            {"description": "纷玩岛", "function": self.option1_menu.display},
+            {"description": "大麦", "function": self.option2_menu.display},
             {"description": "猫眼", "function": self.option3_menu.display}
         ])
 

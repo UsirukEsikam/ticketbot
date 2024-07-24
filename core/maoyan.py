@@ -127,19 +127,20 @@ class MaoyanBot(TicketBot):
         # 点击观影人信息
         self.sel_by_text("观演人信息").click()
         for name, info in self.config.buyer.info.items():
+            self.sel_by_resid("com.sankuai.movie:id/dmh").wait(10)
             time.sleep(2)
             logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, info[0]))
             # 点击添加
             self.sel_by_text("添加").click()
             # 输入姓名
-            input = self.sel_by_resid("buyinput")
+            input = self.dev(textContains="演出").child(index=0, className="android.view.View").child(index=1, className="android.widget.EditText")
             input.click()
-            self.dev.press("back")
             input.send_keys(name)
-            # 输入身份证
-            input = self.sel_by_resid("idinput")
-            input.click()
             self.dev.press("back")
+            # 输入身份证
+            input = self.dev(textContains="演出").child(index=2, className="android.view.View").child(index=1, className="android.widget.EditText")
+            input.click()
             input.send_keys(info[0])
+            self.dev.press("back")
             # 点击确定
             self.sel_by_text("确定").click()
