@@ -66,20 +66,10 @@ class CommandLineApp:
         ])
 
     def damai_presale(self):
-        print("大麦预售流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP预售页面")
-        input("Press Enter to continue...")
         bot_damai = DaimaiBot()
         bot_damai.damai_presale()
 
     def damai_encore(self):
-        print("大麦回流票流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP选票页面")
-        input("Press Enter to continue...")
         bot_damai = DaimaiBot()
         bot_damai.damai_encore()
 
@@ -88,20 +78,10 @@ class CommandLineApp:
         bot_damai.damai_add_buyer()
 
     def livelab_presale(self):
-        print("纷玩岛预售流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP预售页面")
-        input("Press Enter to continue...")
         bot_livelab = LivelabBot()
         bot_livelab.livelab_presale()
 
     def livelab_encore(self):
-        print("纷玩岛回流票流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP选票页面")
-        input("Press Enter to continue...")
         bot_livelab = LivelabBot()
         bot_livelab.livelab_encore()
 
@@ -110,20 +90,10 @@ class CommandLineApp:
         bot_livelab.livelab_add_buyer()
 
     def maoyan_presale(self):
-        print("猫眼预售流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP预售页面")
-        input("Press Enter to continue...")
         bot_maoyan = MaoyanBot()
         bot_maoyan.maoyan_presale()
 
     def maoyan_encore(self):
-        print("猫眼回流票流程")
-        print("1、请在config.yaml中配置好相关信息")
-        print("2、请预选好场次、票档、观演人")
-        print("3、进入APP选票页面")
-        input("Press Enter to continue...")
         bot_maoyan = MaoyanBot()
         bot_maoyan.maoyan_encore()
 
@@ -132,6 +102,13 @@ class CommandLineApp:
         bot_maoyan.maoyan_add_buyer()
 
     def run(self):
+        print("脚本使用流程：")
+        print("1、在config.yaml中配置好金主、票价、场次等信息")
+        print("2、在APP添加观演人（可用脚本自动添加）")
+        print("3、在APP预选场次、票档、观演人")
+        print("4、进入预售页面，运行脚本预售流程")
+        print("5、（可选）没抢到，则进入APP选票界面，运行回流票流程")
+        input("Press Enter to continue...")
         try:
             self.main_menu.display()
         except Exception as e:
