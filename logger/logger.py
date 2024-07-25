@@ -6,7 +6,7 @@ logger = logging.getLogger()
 
 def set_logger():
     logger.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(process)d-%(threadName)s - %(levelname)s: %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(funcName)s - %(levelname)s: %(message)s')
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
