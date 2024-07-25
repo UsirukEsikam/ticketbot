@@ -32,12 +32,21 @@ class DaimaiBot(TicketBot):
         V3：最原始的法子：出去再进来
 
         """
+        ticket_num = len(self.config.buyer.info)
+        total_price = ticket_num * self.config.ticket.target_price
         while True:
             # 点击场次
             self.sel_children(self.damai_perform_flow, ticket_tier, "android.view.ViewGroup").click()
             # 点击票价
             self.sel_children(self.damai_price_flow, target_tier, "android.widget.FrameLayout").click()
+            time.sleep(0.05)
             if self.sel_by_text(magic_word).exists:
+                if ticket_num > 1:
+                    if not self.sel_by_text(total_price).exists:
+                        logger.info("余票不足{0}张，跳过".format(ticket_num))
+                        self.dev.press("back")
+                        self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
+                        continue
                 logger.info("刷出票价：{0}档，尝试进入下单页面".format(target_tier))
                 return True
             else:

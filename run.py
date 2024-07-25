@@ -113,9 +113,6 @@ class CommandLineApp:
             self.main_menu.display()
         except Exception as e:
             logger.error(e, stack_info=True, exc_info=True)
-        finally:
-            bot = TicketBot(app="main")
-            bot.screenshot()
 
 if __name__ == "__main__":
     app = CommandLineApp()
