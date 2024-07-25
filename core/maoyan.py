@@ -24,6 +24,60 @@ class MaoyanBot(TicketBot):
                 logger.info("弹窗检测超时")
                 return None
 
+    def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
+        """
+        刷票程序V2
+        V1：先用点击票价来试试（缺票的票价点起来是直接弹窗的，实际上没有作用）
+        V2：点击场次刷票，点击场次和票价都会出loading，猜测都会做余票检测
+
+        """
+        ticket_num = len(self.config.buyer.info)
+        total_price = ticket_num * self.config.ticket.target_price
+        while True:
+            # 点击场次
+            self.sel_by_text(ticket_tier).click()
+            # 上滑
+            self.dev.swipe_ext("up", scale=0.9)
+            # 点击目标票价
+            self.sel_by_text(target_tier).click()
+            time.sleep(0.05)
+            # 弹缺票提示：无票，否则可下单
+            if self.sel_by_text("若不是您的常用手机号").exists:
+                # 这个值有点儿怪，估计是随机的，再观察观察
+                self.sel_by_text("QcFQlwZ+7fcxb+GN3Y6bdOtQkI8JRe2ROKg9Poe6R+0f8AF8Bj7VhD492QAAAABJRU5ErkJggg==").click()
+                self.dev.swipe_ext("down", scale=0.9)
+            else:
+                if ticket_num > 1:
+                    if not self.sel_by_text(total_price).exists:
+                        logger.info("余票不足{0}张，跳过".format(ticket_num))
+                        continue
+                logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
+                return True
+
+    def order_workflow(self):
+        """
+        下单流程的函数
+        主要功能：点击确定→下单→alter check（需再循环一次return False，下单完成、出错etc return True）
+
+        """
+        # 点击确定
+        self.sel_by_text("确认").click()
+        while True:
+            # 等待页面载入
+            self.sel_by_text("应付").wait(10)
+            # 点击提交
+            self.sel_by_text("立即支付").click()
+            # 记得回来改
+            hint = self.alert_check(["库存不足"], 10)
+            if hint == "库存不足":
+                logger.info("出现'{0}'弹窗，继续运行...".format(hint))
+                self.screenshot()
+                continue
+            else:
+                logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
+                self.screenshot()
+                return True
+
     def maoyan_presale(self):
         """
         猫眼预售流程
@@ -33,58 +87,14 @@ class MaoyanBot(TicketBot):
         
         """
         logger.info("=== 猫眼预售流程 ===")
+        # 定时运行
         if self.trigger(self.config.scheduler.trigger):
-            # 点击购票（看起来会有几种情况：立即购票、特惠购票；先观察观察，以后更新）
-            self.sel_by_text("立即预订").click()
+            # 点击购票（会有好几种情况，用坐标点）
+            self.dev.click(612, 1960)
             while True:
-                # 点击确定
-                self.sel_by_text("确认").click()
-                while True:
-                    # 等待页面载入
-                    self.sel_by_text("应付").wait(10)
-                    # 点击提交
-                    self.sel_by_text("立即支付").click()
-                    # 记得回来改
-                    hint = self.alert_check(["继续尝试", "我知道了"], 10)
-                    if hint == "继续尝试":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        continue
-                    elif hint == "我知道了":
-                        logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                        self.screenshot()
-                        self.sel_by_text(hint).click()
-                        break
-                    # 还少支付界面的提示
-                    else:
-                        logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                        self.screenshot()
-                        return
-
-    def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
-        """
-        刷票程序V2
-        V1：先用点击票价来试试（缺票的票价点起来是直接弹窗的，实际上没有作用）
-        V2：点击场次刷票，点击场次和票价都会出loading，猜测都会做余票检测
-
-        """
-        while True:
-            # 点击场次
-            self.sel_by_text(ticket_tier).click()
-            # 上滑
-            self.dev.swipe_ext("up", scale=0.9)
-            # 点击目标票价
-            self.sel_by_text(target_tier).click()
-            time.sleep(0.1)
-            # 弹缺票提示：无票，否则可下单
-            if self.sel_by_text("若不是您的常用手机号").exists:
-                # 这个值有点儿怪，估计是随机的，再观察观察
-                self.sel_by_text("QcFQlwZ+7fcxb+GN3Y6bdOtQkI8JRe2ROKg9Poe6R+0f8AF8Bj7VhD492QAAAABJRU5ErkJggg==").click()
-                self.dev.swipe_ext("down", scale=0.9)
-            else:
-                logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
-                return True
+                # 开始下单
+                if self.order_workflow():
+                    return
 
     def maoyan_encore(self):
         """
@@ -97,28 +107,8 @@ class MaoyanBot(TicketBot):
         logger.info("=== 猫眼回流票流程 ===")
         while True:
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "总计"):
-                # 点确认
-                self.sel_by_text("确认").click()
-                # 等待页面载入
-                self.sel_by_text("应付").wait(10)
-                # 点击提交
-                self.sel_by_text("立即支付").click()
-                # 记得回来改
-                hint = self.alert_check(["继续尝试", "我知道了"], 10)
-                if hint == "继续尝试":
-                    logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.screenshot()
-                    self.sel_by_text(hint).click()
-                    continue
-                elif hint == "我知道了":
-                    logger.info("出现'{0}'弹窗，继续运行...".format(hint))
-                    self.screenshot()
-                    self.sel_by_text(hint).click()
-                    break
-                # 还少支付界面的提示
-                else:
-                    logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
-                    self.screenshot()
+                # 开始下单
+                if self.order_workflow():
                     return
 
     def maoyan_add_buyer(self):

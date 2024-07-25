@@ -112,7 +112,7 @@ class CommandLineApp:
         try:
             self.main_menu.display()
         except Exception as e:
-            logger.error(e, stack_info=True, exc_info=True)
+            logger.exception(e)
 
 if __name__ == "__main__":
     app = CommandLineApp()

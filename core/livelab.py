@@ -142,9 +142,3 @@ class LivelabBot(TicketBot):
             # 确定
             self.sel_by_desc("确定").click()
             time.sleep(1)
-
-# if __name__ == "__main__":
-#     bot = LivelabBot("6fe00acd")
-    # bot.livelab_presale()
-    # bot.livelab_encore()
-    # bot.livelab_add_buyer()
