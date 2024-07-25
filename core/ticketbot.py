@@ -50,7 +50,7 @@ class TicketBot(object):
         return parent.child(index=index, className=class_name)
 
     def screenshot(self):
-        self.dev.screenshot("./image/{0}-{1}.jpg".format(__name__, time.strftime("%Y%m%d-%H%M%S")))
+        self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
 
     def trigger(self, trigger):
         now_time = datetime.now
