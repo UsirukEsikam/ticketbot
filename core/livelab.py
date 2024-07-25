@@ -28,7 +28,7 @@ class LivelabBot(TicketBot):
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """刷票程序（不断点击两个票价，出现break_word后break，返回True"""
         ticket_num = len(self.config.buyer.info)
-        total_price = ticket_num * self.config.ticket.target_price
+        total_price = "￥{0}.00".format(ticket_num * self.config.ticket.target_price)
         # 点击场次
         self.sel_by_desc(ticket_tier).click()
         # 上滑
