@@ -54,7 +54,6 @@ class CommandLineApp:
 
         self.option3_menu = Menu("猫眼", [
             {"description": "抢预售票", "function": self.maoyan_presale},
-            {"description": "刷回流票", "function": self.maoyan_encore},
             {"description": "添加金主信息", "function": self.maoyan_add_buyer}
         ])
 
@@ -92,19 +91,15 @@ class CommandLineApp:
         bot_maoyan = MaoyanBot()
         bot_maoyan.maoyan_presale()
 
-    def maoyan_encore(self):
-        bot_maoyan = MaoyanBot()
-        bot_maoyan.maoyan_encore()
-
     def maoyan_add_buyer(self):
         bot_maoyan = MaoyanBot()
         bot_maoyan.maoyan_add_buyer()
 
     def run(self):
         print("脚本使用流程：")
-        print("1、在config.yaml中配置好金主、票价、场次等信息")
+        print("1、在config.yaml中配置好金主、票价等信息")
         print("2、在APP添加观演人（可用脚本自动添加）")
-        print("3、在APP预选场次、票档、观演人")
+        print("3、在APP预选场次、票档、观演人（重要）")
         print("4、进入预售页面，运行脚本预售流程")
         print("5、（可选）没抢到，则进入APP选票界面，运行回流票流程")
         input("Press Enter to continue...")
