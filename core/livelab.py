@@ -32,7 +32,7 @@ class LivelabBot(TicketBot):
 
         """
         ticket_num = len(self.config.buyer.info)
-        total_price = "￥{0}.00".format(ticket_num * self.config.ticket.target_price)
+        total_price = "￥{0}.".format(ticket_num * self.config.ticket.target_price)
         while True:
             # 等待页面加载、给150ms自动选择时间
             self.sel_by_desc("请选择票品").wait(3)
@@ -68,7 +68,7 @@ class LivelabBot(TicketBot):
             logger.info("出现'{0}'弹窗，继续运行...".format(hint))
             # self.sel_by_desc("重新选择").click()
             self.dev.click(534, 1538)
-            return True
+            return False
         elif hint == "订单中包含已购买":
             logger.info("出现'{0}'弹窗，脚本结束".format(hint))
             return True
@@ -107,7 +107,7 @@ class LivelabBot(TicketBot):
         3、运行脚本
 
         """
-        logger.info("=== 纷玩岛回流票流程 ===")
+        logger.info("进入纷玩岛回流票流程...")
         while True:
             # 查余票
             if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "购买数量"):

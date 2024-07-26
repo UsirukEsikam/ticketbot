@@ -1,5 +1,4 @@
 import os
-from core.ticketbot import TicketBot
 from core.livelab import LivelabBot
 from core.damai import DaimaiBot
 from core.maoyan import MaoyanBot
