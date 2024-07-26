@@ -90,7 +90,7 @@ class LivelabBot(TicketBot):
         """
         logger.info("进入纷玩岛预售流程...")
         # 定时启动
-        if self.trigger(self.config.scheduler.trigger):
+        if self.time_trigger(self.config.scheduler.trigger):
             # 点击立即购买
             self.sel_by_desc("立即购买").click()
             while True:

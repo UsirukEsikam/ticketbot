@@ -13,7 +13,6 @@ class TicketBot(object):
         self.read_config()
         self.init_dev(serial)
         self.init_damai()
-        self.init_livelab()
 
     def read_config(self):
         self.config = Config("config.yaml")
@@ -30,9 +29,6 @@ class TicketBot(object):
         self.damai_perform_flow = self.sel_by_resid("cn.damai:id/project_detail_perform_flowlayout")
         # 价格的layout
         self.damai_price_flow = self.sel_by_resid("cn.damai:id/project_detail_perform_price_flowlayout")
-
-    def init_livelab(self):
-        pass
 
     def sel_by_text(self, text):
         return self.dev(textContains=text)
@@ -52,7 +48,7 @@ class TicketBot(object):
     def screenshot(self):
         self.dev.screenshot("./image/{0}.jpg".format(time.strftime("%Y%m%d-%H%M%S")))
 
-    def trigger(self, trigger):
+    def time_trigger(self, trigger):
         now_time = datetime.now
         while True:
             if now_time() >= trigger:

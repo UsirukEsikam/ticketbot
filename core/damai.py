@@ -91,7 +91,7 @@ class DaimaiBot(TicketBot):
         """
         logger.info("进入大麦预售流程...")
         # 定时运行
-        if self.trigger(self.config.scheduler.trigger):
+        if self.time_trigger(self.config.scheduler.trigger):
             # 点击立即预定
             self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
             while True:

@@ -58,7 +58,7 @@ class MaoyanBot(TicketBot):
         """
         logger.info("进入猫眼预售流程...")
         # 定时运行
-        if self.trigger(self.config.scheduler.trigger):
+        if self.time_trigger(self.config.scheduler.trigger):
             # 点击购票（会有好几种情况，用坐标点）
             self.dev.click(612, 1960)
             while True:
