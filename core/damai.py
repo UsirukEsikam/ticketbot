@@ -24,7 +24,7 @@ class DaimaiBot(TicketBot):
                 logger.info("弹窗检测超时")
                 return None
 
-    def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
+    def ticket_check(self, magic_word):
         """
         刷票程序V3（V1点票价，好像没用）
         V1: 循环点击两个门票（好像是没作用，文件最下面留了个备份）
@@ -34,7 +34,7 @@ class DaimaiBot(TicketBot):
 
         """
         ticket_num = len(self.config.buyer.info)
-        total_price = ticket_num * self.config.ticket.target_price
+        total_price = ticket_num * self.config.ticket.price
         while True:
             # 等待页面加载、给150ms自动选择时间
             self.sel_by_text("¥").wait(3)
@@ -42,7 +42,7 @@ class DaimaiBot(TicketBot):
             # 判断magic word
             if self.sel_by_text(magic_word).exists:
                 if self.sel_by_text(total_price).exists:
-                    logger.info("刷出票价：{0}档，尝试进入下单页面".format(target_tier))
+                    logger.info("刷出票价：{0}，尝试进入下单页面".format(self.config.ticket.price))
                     return True
                 else:
                     logger.info("余票不足{0}张，跳过".format(ticket_num))
@@ -92,7 +92,6 @@ class DaimaiBot(TicketBot):
         logger.info("进入大麦预售流程...")
         # 定时运行
         if self.trigger(self.config.scheduler.trigger):
-            logger.info("到达设定时间，开始抢票")
             # 点击立即预定
             self.sel_by_resid("cn.damai:id/trade_project_detail_purchase_status_bar_container_fl").click()
             while True:
@@ -111,7 +110,7 @@ class DaimaiBot(TicketBot):
         logger.info("进入大麦回流票流程...")
         while True:
             # 查库存
-            if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "价格明细"):
+            if self.ticket_check("价格明细"):
                 # 开始下单流程
                 if self.order_workflow():
                     return
@@ -119,8 +118,8 @@ class DaimaiBot(TicketBot):
     def damai_add_buyer(self):
         """添加观演人，需从'我的'界面开始"""
         self.sel_by_text("观演人").click()
-        for name, info in self.config.buyer.info.items():
-            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, info[0]))
+        for name, id in self.config.buyer.info.items():
+            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, id))
             # 点击添加
             self.sel_by_text("添加新观演人").click()
             # 填写姓名
@@ -128,7 +127,7 @@ class DaimaiBot(TicketBot):
             self.sel_by_text("请填写观演人姓名").send_keys(name)
             # 填写身份证号
             self.sel_by_text("请填写证件号码").click()
-            self.sel_by_text("请填写证件号码").send_keys(info[0])
+            self.sel_by_text("请填写证件号码").send_keys(id)
             # 关闭输入法窗口
             self.dev.press("back")
             # 勾选同意

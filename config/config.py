@@ -15,18 +15,17 @@ class Config(object):
 
 class GhostConfig(object):
     def __init__(self, config) -> None:
-        self.info = dict(zip([config.get("ghost_name")], [config.get("ghost_mobile")]))
+        self.name = config.get("ghost_name")
 
 class BuyerConfig(object):
     def __init__(self, config) -> None:
-        self.info = dict(zip(config.get("buyer_name"), zip(config.get("buyer_id"), config.get("buyer_mobile"))))
+        self.info = dict(zip(config.get("buyer_name"), config.get("buyer_id")))
 
 class TicketConfig(object):
     def __init__(self, config) -> None:
-        self.target_price = config.get("target_price")
-        self.target_tier = config.get("target_tier")
-        self.ticket_tier = config.get("ticket_tier")
-        self.coop_tier = config.get("coop_tier")
+        self.price = config.get("ticket_price")
+        self.tier = config.get("ticket_tier")
+        self.date = config.get("ticket_date")
 
 class SchedulerConfig(object):
     def __init__(self, config) -> None:

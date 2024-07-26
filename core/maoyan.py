@@ -59,7 +59,6 @@ class MaoyanBot(TicketBot):
         logger.info("进入猫眼预售流程...")
         # 定时运行
         if self.trigger(self.config.scheduler.trigger):
-            logger.info("到达设定时间，开始抢票")
             # 点击购票（会有好几种情况，用坐标点）
             self.dev.click(612, 1960)
             while True:
@@ -72,10 +71,10 @@ class MaoyanBot(TicketBot):
         self.dev.swipe_ext("up", scale=0.9)
         # 点击观影人信息
         self.sel_by_text("观演人信息").click()
-        for name, info in self.config.buyer.info.items():
+        for name, id in self.config.buyer.info.items():
             self.sel_by_resid("com.sankuai.movie:id/dmh").wait(10)
             time.sleep(2)
-            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, info[0]))
+            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, id))
             # 点击添加
             self.sel_by_text("添加").click()
             # 输入姓名
@@ -86,7 +85,7 @@ class MaoyanBot(TicketBot):
             # 输入身份证
             input = self.dev(textContains="演出").child(index=2, className="android.view.View").child(index=1, className="android.widget.EditText")
             input.click()
-            input.send_keys(info[0])
+            input.send_keys(id)
             self.dev.press("back")
             # 点击确定
             self.sel_by_text("确定").click()

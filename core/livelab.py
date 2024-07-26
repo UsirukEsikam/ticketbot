@@ -24,7 +24,7 @@ class LivelabBot(TicketBot):
                 logger.info("弹窗检测超时")
                 return None
 
-    def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
+    def ticket_check(self, magic_word):
         """
         刷票程序V2
         V1：不断点击两个票价，出现break_word后break，返回True
@@ -32,7 +32,7 @@ class LivelabBot(TicketBot):
 
         """
         ticket_num = len(self.config.buyer.info)
-        total_price = "￥{0}.".format(ticket_num * self.config.ticket.target_price)
+        total_price = "￥{0}.".format(ticket_num * self.config.ticket.price)
         while True:
             # 等待页面加载、给150ms自动选择时间
             self.sel_by_desc("请选择票品").wait(3)
@@ -40,7 +40,7 @@ class LivelabBot(TicketBot):
             # 判断magic word
             if self.sel_by_desc(magic_word).exists:
                 if self.sel_by_desc(total_price).exists:
-                    logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
+                    logger.info("刷出票价：{0}，尝试进入下单页面".format(self.config.ticket.price))
                     return True
                 else:
                     logger.info("余票不足{0}张，跳过".format(ticket_num))
@@ -91,7 +91,6 @@ class LivelabBot(TicketBot):
         logger.info("进入纷玩岛预售流程...")
         # 定时启动
         if self.trigger(self.config.scheduler.trigger):
-            logger.info("到达设定时间，开始抢票")
             # 点击立即购买
             self.sel_by_desc("立即购买").click()
             while True:
@@ -110,7 +109,7 @@ class LivelabBot(TicketBot):
         logger.info("进入纷玩岛回流票流程...")
         while True:
             # 查余票
-            if self.ticket_check(self.config.ticket.ticket_tier, self.config.ticket.target_tier, self.config.ticket.coop_tier, "购买数量"):
+            if self.ticket_check("购买数量"):
                 # 开始下单流程
                 if self.order_workflow():
                     return
@@ -118,8 +117,8 @@ class LivelabBot(TicketBot):
     def livelab_add_buyer(self):
         """添加用户函数，需要从'我的'页面开始"""
         self.sel_by_desc("持票人").click()
-        for name, info in self.config.buyer.info.items():
-            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, info[0]))
+        for name, id in self.config.buyer.info.items():
+            logger.info("开始添加观演人，姓名：{0}，身份证：{1}".format(name, id))
             self.sel_by_desc("新增持票人").click()
             # 输入姓名
             input = self.dev(index=1, className="android.view.View").child(index=2, className="android.view.View").child(className="android.widget.EditText")
@@ -132,7 +131,7 @@ class LivelabBot(TicketBot):
             # 输入身份证
             input = self.dev(index=1, className="android.view.View").child(index=6, className="android.view.View").child(className="android.widget.EditText")
             input.click()
-            input.send_keys(info[0])
+            input.send_keys(id)
             self.dev.press("back")
             # 勾选协议
             self.dev(index=9, className="android.view.View").click()
