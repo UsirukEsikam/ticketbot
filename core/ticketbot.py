@@ -78,7 +78,7 @@ ___________.__        __           __    __________        __
         """)
         # 输出配置信息，二次确认用
         logger.info("请认真核对配置信息：")
-        logger.info("用户信息：{0}".format(self.config.ghost.name))
+        logger.info("用户名称：{0}".format(self.config.ghost.name))
         logger.info("金主信息：{0}".format(self.config.buyer.info))
         logger.info("目标票价：{0}".format(self.config.ticket.price))
         logger.info("开枪时间：{0}".format(self.config.scheduler.trigger))
