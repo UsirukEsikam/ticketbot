@@ -26,9 +26,10 @@ class MaoyanBot(TicketBot):
 
     def ticket_check(self, ticket_tier, target_tier, coop_tier, magic_word):
         """
-        刷票程序V2
+        刷票程序V3
         V1：先用点击票价来试试（缺票的票价点起来是直接弹窗的，实际上没有作用）
         V2：点击场次刷票，点击场次和票价都会出loading，猜测都会做余票检测
+        V3：靠拼接“缺货检测的字符串”来判断（等晚上记得回来更新吧）
 
         """
         ticket_num = len(self.config.buyer.info)
@@ -36,23 +37,23 @@ class MaoyanBot(TicketBot):
         while True:
             # 点击场次
             self.sel_by_text(ticket_tier).click()
-            # 上滑
-            self.dev.swipe_ext("up", scale=0.9)
+            # 等刷新
+            time.sleep(0.2)
+            # 原理：猫眼“缺货登记”字样是直接在text里的，可作为检测标准；另外点击票价的时候有可能也会再check一次，无票提示也再判断下吧
+            if self.sel_by_text("¥{0}缺货登记".format(self.config.ticket.target_price)).exists:
+                continue
             # 点击目标票价
             self.sel_by_text(target_tier).click()
-            time.sleep(0.05)
             # 弹缺票提示：无票，否则可下单
             if self.sel_by_text("若不是您的常用手机号").exists:
                 # 这个值有点儿怪，估计是随机的，再观察观察
                 self.sel_by_text("QcFQlwZ+7fcxb+GN3Y6bdOtQkI8JRe2ROKg9Poe6R+0f8AF8Bj7VhD492QAAAABJRU5ErkJggg==").click()
-                self.dev.swipe_ext("down", scale=0.9)
-            else:
-                if ticket_num > 1:
-                    if not self.sel_by_text(total_price).exists:
-                        logger.info("余票不足{0}张，跳过".format(ticket_num))
-                        continue
-                logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
-                return True
+                continue
+            if self.sel_by_text(total_price).exists:
+                logger.info("余票不足{0}张，跳过".format(ticket_num))
+                continue
+            logger.info("刷出票价：{0}，尝试进入下单页面".format(target_tier))
+            return True
 
     def order_workflow(self):
         """
