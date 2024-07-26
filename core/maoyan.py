@@ -42,6 +42,8 @@ class MaoyanBot(TicketBot):
             if hint == "库存不足":
                 logger.info("出现'{0}'弹窗，继续运行...".format(hint))
                 self.screenshot()
+                self.sel_by_text("立即支付").click()
+                self.sel_by_text(hint).wait_gone(3)
                 continue
             else:
                 logger.info("未知情况（可能抢到了，可能出错了），请查看截图")
